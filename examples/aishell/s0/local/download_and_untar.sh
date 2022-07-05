@@ -85,6 +85,7 @@ if ! tar -xvzf $part.tgz; then
   exit 1;
 fi
 
+cd ..
 touch $data/$part/.complete
 
 if [ $part == "data_aishell" ]; then
@@ -97,6 +98,7 @@ fi
 
 echo "$0: Successfully downloaded and un-tarred $data/$part.tgz"
 
+cd ../../..
 if $remove_archive; then
   echo "$0: removing $data/$part.tgz file since --remove-archive option was supplied."
   rm $data/$part.tgz
