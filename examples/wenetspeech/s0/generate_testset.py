@@ -1,6 +1,7 @@
 from tqdm import tqdm
 import string
 
+'''
 with open("./data/test/wav.scp", "r") as f_in:
     lines = f_in.readlines()
 
@@ -20,4 +21,13 @@ for line in tqdm(lines):
 with open("./data/test/wav_new.scp", "w") as f_out:
     f_out.writelines(new_lines)
 
+'''
 
+with open("./data/test/wav_new.scp_re", "r") as f_in:
+    lines = f_in.readlines()
+
+
+new_lines = []
+for line in tqdm(lines):
+    new_line = line.replace("/work/yangmeng03/wenet/","/home/wenet2/")
+    new_lines.append(new_line)
