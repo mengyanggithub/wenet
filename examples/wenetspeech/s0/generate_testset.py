@@ -31,3 +31,6 @@ new_lines = []
 for line in tqdm(lines):
     new_line = line.replace("/work/yangmeng03/wenet/","/home/wenet2/")
     new_lines.append(new_line)
+
+with open("./data/test/wav_new.scp_re", "w") as f_out:
+    f_out.writelines(new_lines)
