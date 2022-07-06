@@ -1,6 +1,7 @@
 import os
 import librosa
 import soundfile as sf
+from tqdm import tqdm
 
 scp_path = '/work/yangmeng03/wenet/examples/wenetspeech/s0/data/test'
 out_dir = '/work/yangmeng03/wenet/examples/wenetspeech/s0/data/test/audio_re'
@@ -13,8 +14,8 @@ f1 = open(wav_scp, 'r')
 wav_scp_re = os.path.join(scp_path, 'wav_new.scp_re')
 f2 = open(wav_scp_re, 'w')
 
-line = f1.readline()
-while line:
+lines = f1.readlines()
+for line in tqdm(lines):
 
     line = line.strip()
     split = line.split()
@@ -33,8 +34,6 @@ while line:
     sf.write(out_path, audio_re, resample)
 
     f2.write(wav_name + ' ' + out_path + '\n')
-
-    line = f1.readline()
 
 f1.close()
 f2.close()
