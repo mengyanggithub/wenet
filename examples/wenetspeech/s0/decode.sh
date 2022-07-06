@@ -9,7 +9,7 @@ set -e
 nj=1
 
 # For CTC WFST based decoding
-fst_root=/home/share/model_trained/lang_fst/lang_test
+fst_root=/home/wenet2/examples/wenetspeech/s0/data/lang_test
 fst_path=$fst_root/TLG.fst
 dict_file=$fst_root/words.txt
 acoustic_scale=10.0
@@ -20,8 +20,8 @@ max_active=7000
 blank_skip_thresh=0.98
 
 # data path
-scp=/home/share/data/test/test_v20220321/rand_p_800/wav.scp
-label_file=/home/share/data/test/test_v20220321/rand_p_800/text
+scp=/home/wenet2/examples/wenetspeech/s0/data/test/wav_new.scp_re
+label_file=/home/wenet2/examples/wenetspeech/s0/data/test/text
 
 # decode params
 chunk_size=16
@@ -34,7 +34,7 @@ reverse_weight=0.3
 rescoring_weight=1.0
 
 # model path
-onnx_model_root=/home/share/model_trained/onnx/u2++_finetune_v20220526
+onnx_model_root=/home/wenet2/examples/wenetspeech/s0/onnx/u2++_finetune_v20220526
 onnx_model_dir=$onnx_model_root/chunk_${chunk_size}_leftChunk_${num_left_chunks}
 result_dir=$onnx_model_dir/result
 dir=$result_dir/lm_runtime
