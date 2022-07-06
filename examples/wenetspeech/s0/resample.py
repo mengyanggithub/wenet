@@ -3,7 +3,7 @@ import librosa
 import soundfile as sf
 
 scp_path = '/work/yangmeng03/wenet/examples/wenetspeech/s0/data/test'
-out_dir = '/work/yangmeng03/wenet/examples/wenetspeech/s0/data/audio_re'
+out_dir = '/work/yangmeng03/wenet/examples/wenetspeech/s0/data/test/audio_re'
 
 resample = 16000
 
