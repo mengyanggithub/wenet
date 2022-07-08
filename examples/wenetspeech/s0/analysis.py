@@ -28,7 +28,7 @@ def get_error_file(in_file,in_file_refer,out_file, out_file_2):
     with open(out_file,"w") as f_w:
         f_w.writelines(new_lines)
     with open(out_file_2,"w") as f_w_2:
-        f_w_2.writelines(new_lines)    
+        f_w_2.writelines(new_lines_2)    
 
 if __name__=="__main__":
     get_error_file("/work/yangmeng03/wenet/examples/wenetspeech/s0/onnx/u2++_finetune_v20220526/chunk_16_leftChunk_-1/result/lm_runtime/wer",
