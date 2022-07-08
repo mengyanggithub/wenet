@@ -14,7 +14,7 @@ def get_error_file(in_file,in_file_refer,out_file):
             new_lines.append(line)
             new_lines.append(lines[i+1])
             new_lines.append(lines[i+2])
-            if lines[i+1] != lines_refer[i+1]:
+            if lines[i+2] != lines_refer[i+2]:
                 new_lines.append(lines_refer[i+1])
             new_lines.append("\n")
     
