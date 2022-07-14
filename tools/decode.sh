@@ -28,7 +28,7 @@ if [ $# != 5 ]; then
   exit 1;
 fi
 
-if ! which decoder_main > /dev/null; then
+if ! which /home/wenet2/runtime/server/x86/build/bin/decoder_main > /dev/null; then
   echo "decoder_main is not built, please go to runtime/server/x86 to build it."
   exit 1;
 fi

@@ -6,12 +6,13 @@ export GLOG_v=2
 
 set -e
 
-nj=1
+nj=16
 
 # For CTC WFST based decoding
 fst_root=/home/wenet2/examples/wenetspeech/s0/data/lang_test
 fst_path=$fst_root/TLG.fst
 dict_file=$fst_root/words.txt
+unit_file=/home/wenet2/examples/wenetspeech/s0/data/local/dict/units.txt
 acoustic_scale=10.0
 beam=15.0
 lattice_beam=7.5
@@ -62,7 +63,7 @@ if [ ! -z $fst_path ]; then
 fi
 for n in $(seq ${nj}); do
 {
-  ./build/decoder_main \
+  /home/wenet2/runtime/server/x86/build/bin/decoder_main \
      --rescoring_weight $rescoring_weight \
      --ctc_weight $ctc_weight \
      --reverse_weight $reverse_weight \
@@ -72,6 +73,7 @@ for n in $(seq ${nj}); do
      --wav_scp ${dir}/split${nj}/wav.${n}.scp \
      --onnx_dir $onnx_model_dir \
      --dict_path $dict_file \
+     --unit_path $unit_file \
      $wfst_decode_opts \
      --result ${dir}/split${nj}/${n}.text &> ${dir}/split${nj}/${n}.log
 } &
