@@ -1,5 +1,7 @@
 from tqdm import tqdm
 import jieba
+from os import listdir
+from os import path
 
 def seg_len(in_str,out_str):
     out_items = jieba.cut(in_str)
@@ -13,7 +15,7 @@ def filter_punc(in_list):
     out_list = [item for item in in_list if item not in punc_list]
     return out_list
 
-def process(in_file_name, out_file_name):
+def process(in_file_name):
     str_set = set()
     with open(in_file_name, "r") as f_in:
         lines = f_in.readlines()
@@ -28,12 +30,21 @@ def process(in_file_name, out_file_name):
         seg_item = filter_punc(seg_item)
         new_line = " ".join(seg_item)
         new_lines.append(new_line+"\n")
+    
+    return new_lines
 
+def get_train_file(in_dir,out_file_name):
+    file_name = [f for f in listdir(in_dir) if "content" in f]
+    
     with open(out_file_name, "w") as f_out:
-        f_out.writelines(new_lines)
+        for file in file_name:
+            in_path = path.join(in_dir, file)
+            lines = process(in_path)
+            f_out.writelines(lines)
 
 if __name__=="__main__":
-    process("/work/yangmeng03/data/asr/qiyu/2022-07-20/000000_0_content","/work/yangmeng03/data/asr/qiyu/2022-07-20/train.txt")
+    # process("/work/yangmeng03/data/asr/qiyu/2022-07-20/000000_0_content","/work/yangmeng03/data/asr/qiyu/2022-07-20/train.txt")
+    get_train_file("/work/yangmeng03/data/asr/qiyu/2022-07-20","/work/yangmeng03/data/asr/qiyu/2022-07-20/train.txt")
 
 
 
