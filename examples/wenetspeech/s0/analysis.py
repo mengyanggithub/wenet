@@ -42,8 +42,8 @@ def get_diff_file(in_file,in_file_refer,out_file):
         if line.startswith("rec:") and line != lines_refer[i]:
             new_lines.append(lines[i-3])
             new_lines.append(lines[i-1])
-            new_lines.append(lines_refer[i])
             new_lines.append(lines[i])
+            new_lines.append(lines_refer[i])
     
     with open(out_file, "w") as f_w:
         f_w.writelines(new_lines)
@@ -55,15 +55,21 @@ if __name__=="__main__":
     "/work/yangmeng03/wenet/examples/wenetspeech/s0/onnx/u2++_finetune_v20220526/chunk_16_leftChunk_-1/result/lm_runtime/error_analysis",
     "/work/yangmeng03/wenet/examples/wenetspeech/s0/onnx/u2++_finetune_v20220526/chunk_16_leftChunk_-1/result/lm_runtime/error_analysis_2")
     '''
-    '''
+    
     get_diff_file(
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/no_lm/wer",
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/real_train_v1/wer",
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/diff_analysis_nolm_realtrain.txt"
     )
-    '''
+
     get_diff_file(
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/real_train_v1/wer",
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/qiyu_20220719_3gram/lm_runtime_2022_07_19/wer",
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/diff_analysis_realtrain_qiyu_20220719_3gram.txt"
+    )
+
+    get_diff_file(
+        "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/qiyu_20220719_3gram/lm_runtime_2022_07_19/wer",
+        "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/qiyu_20220719_4gram/wer",
+        "/work/yangmeng03/wenet/examples/wenetspeech/s0/diff_analysis_qiyu_20220719_3gram_qiyu_20220719_4gram.txt"
     )
