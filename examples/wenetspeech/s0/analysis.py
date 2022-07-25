@@ -64,6 +64,6 @@ if __name__=="__main__":
     '''
     get_diff_file(
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/real_train_v1/wer",
-        "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/qiyu_20220719_3gram/wer",
+        "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/qiyu_20220719_3gram/lm_runtime_2022_07_19/wer",
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/diff_analysis_realtrain_qiyu_20220719_3gram.txt"
     )
