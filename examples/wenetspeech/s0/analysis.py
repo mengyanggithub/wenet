@@ -55,8 +55,15 @@ if __name__=="__main__":
     "/work/yangmeng03/wenet/examples/wenetspeech/s0/onnx/u2++_finetune_v20220526/chunk_16_leftChunk_-1/result/lm_runtime/error_analysis",
     "/work/yangmeng03/wenet/examples/wenetspeech/s0/onnx/u2++_finetune_v20220526/chunk_16_leftChunk_-1/result/lm_runtime/error_analysis_2")
     '''
+    '''
     get_diff_file(
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/no_lm/wer",
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/real_train_v1/wer",
         "/work/yangmeng03/wenet/examples/wenetspeech/s0/diff_analysis_nolm_realtrain.txt"
+    )
+    '''
+    get_diff_file(
+        "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/real_train_v1/wer",
+        "/work/yangmeng03/wenet/examples/wenetspeech/s0/all_data/qiyu_20220719_3gram/wer",
+        "/work/yangmeng03/wenet/examples/wenetspeech/s0/diff_analysis_realtrain_qiyu_20220719_3gram.txt"
     )
