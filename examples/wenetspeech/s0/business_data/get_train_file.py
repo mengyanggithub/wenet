@@ -44,7 +44,18 @@ def get_train_file(in_dir,out_file_name):
 
 if __name__=="__main__":
     # process("/work/yangmeng03/data/asr/qiyu/2022-07-20/000000_0_content","/work/yangmeng03/data/asr/qiyu/2022-07-20/train.txt")
-    get_train_file("/work/yangmeng03/data/asr/qiyu/2022-07-20","/work/yangmeng03/data/asr/qiyu/2022-07-20/train.txt")
+    # get_train_file("/work/yangmeng03/data/asr/qiyu/2022-07-20","/work/yangmeng03/data/asr/qiyu/2022-07-20/train.txt")
 
+    import re
+    text = '你好 😂'
+    print(text) # with emoji
+    emoji_pattern = re.compile("["
+        u"\U0001F600-\U0001F64F"  # emoticons
+        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+        u"\U0001F680-\U0001F6FF"  # transport & map symbols
+        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                           "]+", flags=re.UNICODE)
+    print(emoji_pattern.sub(r'', text)) # no emoji
+    
 
 
