@@ -93,7 +93,10 @@ class qiyu_data_processor(data_processor):
         raw_data_path=os.path.join(self.raw_data_path, self.raw_data_file)
         with open(raw_data_path, "r") as f:
             line_list = f.readlines()
-        
+
+        if not os.path.exists(self.train_path):
+            os.makedirs(self.train_path)
+            
         train_text_file = os.path.join(self.train_path, "text")
         with open(train_text_file, "w") as f_out:
             for line in tqdm(line_list):
