@@ -41,7 +41,7 @@ class data_processor():
             f_out.writelines(lexicon_set)
 
     def remove_useless_char_and_extra_space(self,a_str):
-        useless_char="!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~（）。，！《》「」、：﹕“”abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        useless_char="!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~（）。，！《》「」、：？﹕“”abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         new_str = a_str.translate(str.maketrans('', '', useless_char))
         new_str = re.sub(" +"," ",new_str)
         return new_str
@@ -78,17 +78,38 @@ class wiki_zh_data_processor(data_processor):
                     f_out.write(line)
 
     def remove_useless_char_and_extra_space(self,a_str):
-        useless_char="!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~（）。，！《》「」、：﹕“”abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        useless_char="!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~（）。，！《》「」、：？﹕“”abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         new_str = a_str.translate(str.maketrans('', '', useless_char))
         new_str = re.sub(" +"," ",new_str)
         new_str = re.sub("\n \n ","\n",new_str)
         return new_str    
+
+class qiyu_data_processor(data_processor):
+    def __init__(self,raw_data_path, raw_data_file, train_path):
+        super(qiyu_data_processor,self).__init__(raw_data_path, train_path)
+        self.raw_data_file = raw_data_file
+
+    def get_train_text_file(self):
+        raw_data_path=os.path.join(self.raw_data_path, self.raw_data_file)
+        with open(raw_data_path, "r") as f:
+            line_list = f.readlines()
+        
+        train_text_file = os.path.join(self.train_path, "text")
+        with open(train_text_file, "w") as f_out:
+            for line in tqdm(line_list):
+                line = " ".join(jieba.cut(line))
+                line = self.remove_useless_char_and_extra_space(line).strip()
+                if line!="":
+                    f_out.write(line+"\n")
+
+
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='processor for big data')
     parser.add_argument('--data',
                         default="wiki_zh")
     parser.add_argument('--raw_data_path')
+    parser.add_argument('--raw_data_file')
     parser.add_argument('--data_path')
 
     args = parser.parse_args()
@@ -98,3 +119,7 @@ if __name__=="__main__":
         processor.get_train_text_file()
         processor.get_lexicon_file()
 
+    if args.data=="qiyu":
+        processor = qiyu_data_processor(args.raw_data_path,args.raw_data_file,args.data_path)
+        processor.get_train_text_file()
+        processor.get_lexicon_file()        
