@@ -3,6 +3,7 @@ import json
 from tqdm import tqdm
 import jieba
 import re
+import random
 
 import argparse
 
@@ -85,9 +86,10 @@ class wiki_zh_data_processor(data_processor):
         return new_str    
 
 class qiyu_data_processor(data_processor):
-    def __init__(self,raw_data_path, raw_data_file, train_path):
+    def __init__(self,raw_data_path, raw_data_file, train_path, ratio=0):
         super(qiyu_data_processor,self).__init__(raw_data_path, train_path)
         self.raw_data_file = raw_data_file
+        self.ratio = ratio
 
     def get_train_text_file(self):
         raw_data_path=os.path.join(self.raw_data_path, self.raw_data_file)
@@ -104,6 +106,48 @@ class qiyu_data_processor(data_processor):
                 line = self.remove_useless_char_and_extra_space(line).strip()
                 if line!="":
                     f_out.write(line+"\n")
+    
+    def get_certain_ratio(self):
+        train_text_file = os.path.join(self.train_path, "text")
+        ratio_train_path = self.train_path+"_"+str(self.ratio)
+        if not os.path.exists(ratio_train_path):
+            os.makedirs(ratio_train_path)
+
+        ratio_train_file = os.path.join(ratio_train_path, "text")
+        with open(train_text_file, "r") as f_in, open(ratio_train_file, "w") as f_out:
+            line_list = f_in.readlines()
+            for line in tqdm(line_list):
+                N = random.randint(0,100)
+                if N<self.ratio:
+                    f_out.write(line)
+        
+    def get_lexicon_file_for_ratio(self):
+        lexicon_set = set()
+        with open("./lexicon.txt", "r") as f_in:
+            lines = f_in.readlines()
+            for line in lines:
+                items = line.split(" ")
+                if len(items)==0:
+                    continue
+                lexicon_set.add(items[0].strip()+"\n")
+
+        ratio_train_path = self.train_path+"_"+str(self.ratio)
+        if not os.path.exists(ratio_train_path):
+            os.makedirs(ratio_train_path)
+
+        ratio_train_file = os.path.join(ratio_train_path, "text")
+        lexicon_file = os.path.join(ratio_train_path,"lexicon.txt")
+
+        with open(ratio_train_file, "r") as f_in:
+            lines = f_in.readlines()
+            for line in tqdm(lines):
+                items = line.split(" ")
+                if len(items)<1:
+                    continue
+                lexicon_set.update([word.strip()+"\n" for word in items])
+
+        with open(lexicon_file, "w") as f_out:
+            f_out.writelines(lexicon_set)
 
 
 
@@ -114,6 +158,7 @@ if __name__=="__main__":
     parser.add_argument('--raw_data_path')
     parser.add_argument('--raw_data_file')
     parser.add_argument('--data_path')
+    parser.add_argument('--ratio',type=int,default=0)
 
     args = parser.parse_args()
     
@@ -122,7 +167,12 @@ if __name__=="__main__":
         processor.get_train_text_file()
         processor.get_lexicon_file()
 
-    if args.data=="qiyu":
-        processor = qiyu_data_processor(args.raw_data_path,args.raw_data_file,args.data_path)
+    if args.data=="qiyu" and args.ratio==0:
+        processor = qiyu_data_processor(args.raw_data_path,args.raw_data_file,args.data_path,args.ratio)
         processor.get_train_text_file()
         processor.get_lexicon_file()        
+
+    if args.data=="qiyu" and args.ratio!=0:
+        processor = qiyu_data_processor(args.raw_data_path,args.raw_data_file,args.data_path,args.ratio)
+        processor.get_certain_ratio()
+        processor.get_lexicon_file_for_ratio()   
