@@ -149,7 +149,35 @@ class qiyu_data_processor(data_processor):
         with open(lexicon_file, "w") as f_out:
             f_out.writelines(lexicon_set)
 
+class qiyu_voice_data_processor(data_processor):
+        def get_train_text_file(self):
 
+
+            # get all file path
+            file_list = os.listdir(self.raw_data_path)
+            file_path_list = [os.path.join(self.raw_data_path,file) for file in file_list]
+
+            line_list = []
+            for file in file_path_list:
+                with open(file, "r") as f:
+                    lines = f.readlines()
+                    line_list.extend([self.get_raw_line(line) for line in lines])
+                    
+
+            if not os.path.exists(self.train_path):
+                os.makedirs(self.train_path)
+            
+            train_text_file = os.path.join(self.train_path,"text")
+            with open(train_text_file, "w") as f_out:
+                for line in tqdm(line_list):
+                    line = " ".join(jieba.cut(line))
+                    line = self.remove_useless_char_and_extra_space(line).strip()
+                    if line!="":
+                        f_out.write(line.strip()+"\n")
+
+        def get_raw_line(self,line):
+                line = re.sub(r'^\[.*\] ',"",line)
+                return line
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='processor for big data')
@@ -175,4 +203,8 @@ if __name__=="__main__":
     if args.data=="qiyu" and args.ratio!=0:
         processor = qiyu_data_processor(args.raw_data_path,args.raw_data_file,args.data_path,args.ratio)
         processor.get_certain_ratio()
-        processor.get_lexicon_file_for_ratio()   
+        processor.get_lexicon_file_for_ratio()
+
+    if args.data=="qiyu_voice":
+        processor = qiyu_voice_data_processor(args.raw_data_path,args.data_path)
+        processor.get_train_text_file()
