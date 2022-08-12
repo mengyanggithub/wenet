@@ -86,10 +86,13 @@ class wiki_zh_data_processor(data_processor):
         return new_str    
 
 class qiyu_data_processor(data_processor):
-    def __init__(self,raw_data_path, raw_data_file, train_path, ratio=0):
+    def __init__(self,raw_data_path, raw_data_file, train_path, ratio=0,other_dict=False,dict_path=""):
         super(qiyu_data_processor,self).__init__(raw_data_path, train_path)
         self.raw_data_file = raw_data_file
         self.ratio = ratio
+        self.other_dict = other_dict
+        if other_dict==True:
+            self.dict_path=dict_path
 
     def get_train_text_file(self):
         raw_data_path=os.path.join(self.raw_data_path, self.raw_data_file)
@@ -100,9 +103,14 @@ class qiyu_data_processor(data_processor):
             os.makedirs(self.train_path)
             
         train_text_file = os.path.join(self.train_path, "text")
+        if self.other_dict==True:
+            myjieba=jieba.Tokenizer(dictionary=self.dict_path)
         with open(train_text_file, "w") as f_out:
             for line in tqdm(line_list):
-                line = " ".join(jieba.cut(line))
+                if self.other_dict==True:
+                    line = " ".join(myjieba.cut(line, HMM=False))
+                else:
+                    line = " ".join(jieba.cut(line))
                 line = self.remove_useless_char_and_extra_space(line).strip()
                 if line!="":
                     f_out.write(line+"\n")
@@ -187,6 +195,8 @@ if __name__=="__main__":
     parser.add_argument('--raw_data_file')
     parser.add_argument('--data_path')
     parser.add_argument('--ratio',type=int,default=0)
+    parser.add_argument('--other_dict',type=bool,default=False)
+    parser.add_argument('--dict_path')
 
     args = parser.parse_args()
     
@@ -204,6 +214,10 @@ if __name__=="__main__":
         processor = qiyu_data_processor(args.raw_data_path,args.raw_data_file,args.data_path,args.ratio)
         processor.get_certain_ratio()
         processor.get_lexicon_file_for_ratio()
+
+    if args.data=="qiyu" and args.other_dict==True:
+        processor = qiyu_data_processor(args.raw_data_path,args.raw_data_file,args.data_path,args.ratio,args.other_dict,args.dict_path)
+        processor.get_train_text_file()
 
     if args.data=="qiyu_voice":
         processor = qiyu_voice_data_processor(args.raw_data_path,args.data_path)
