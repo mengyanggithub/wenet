@@ -230,3 +230,7 @@ if __name__=="__main__":
     if args.data=="qiyu_voice":
         processor = qiyu_voice_data_processor(args.raw_data_path,args.data_path,args.other_dict,args.dict_path)
         processor.get_train_text_file()
+
+    if args.data=="qiyu_huke":
+        processor = qiyu_data_processor(args.raw_data_path,args.raw_data_file,args.data_path,other_dict=args.other_dict,dict_path=args.dict_path)
+        processor.get_train_text_file()
