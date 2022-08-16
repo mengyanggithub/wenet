@@ -158,9 +158,14 @@ class qiyu_data_processor(data_processor):
             f_out.writelines(lexicon_set)
 
 class qiyu_voice_data_processor(data_processor):
+        def __init__(self,raw_data_path, train_path, other_dict=False,dict_path=""):
+            super(qiyu_data_processor,self).__init__(raw_data_path, train_path)
+            self.other_dict = other_dict
+            if other_dict==True:
+                self.dict_path=dict_path
         def get_train_text_file(self):
-
-
+            if self.other_dict==True:
+                myjieba=jieba.Tokenizer(dictionary=self.dict_path)
             # get all file path
             file_list = os.listdir(self.raw_data_path)
             file_path_list = [os.path.join(self.raw_data_path,file) for file in file_list]
@@ -178,7 +183,10 @@ class qiyu_voice_data_processor(data_processor):
             train_text_file = os.path.join(self.train_path,"text")
             with open(train_text_file, "w") as f_out:
                 for line in tqdm(line_list):
-                    line = " ".join(jieba.cut(line))
+                    if self.other_dict==True:
+                        line = " ".join(myjieba.cut(line, HMM=False))
+                    else:
+                        line = " ".join(jieba.cut(line))
                     line = self.remove_useless_char_and_extra_space(line).strip()
                     if line!="":
                         f_out.write(line.strip()+"\n")
@@ -220,5 +228,5 @@ if __name__=="__main__":
         processor.get_train_text_file()
 
     if args.data=="qiyu_voice":
-        processor = qiyu_voice_data_processor(args.raw_data_path,args.data_path)
+        processor = qiyu_voice_data_processor(args.raw_data_path,args.data_path,args.other_dict,args.dict_path)
         processor.get_train_text_file()
