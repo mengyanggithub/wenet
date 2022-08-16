@@ -159,7 +159,7 @@ class qiyu_data_processor(data_processor):
 
 class qiyu_voice_data_processor(data_processor):
         def __init__(self,raw_data_path, train_path, other_dict=False,dict_path=""):
-            super(qiyu_data_processor,self).__init__(raw_data_path, train_path)
+            super(qiyu_voice_data_processor,self).__init__(raw_data_path, train_path)
             self.other_dict = other_dict
             if other_dict==True:
                 self.dict_path=dict_path
